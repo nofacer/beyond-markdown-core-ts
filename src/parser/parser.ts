@@ -5,8 +5,17 @@ import {BlockType} from "./blocks/blockType";
 class Parser {
     parse(input: string): Block {
         const document = new Block(BlockType.Document)
-        const paragraph = new ParagraphBlock(BlockType.Paragraph, input)
-        document.addChild(paragraph)
+        const lines = input.split('\n')
+        let previousBlock = null
+        for (const line of lines) {
+            if (!previousBlock) {
+                const paragraph = new ParagraphBlock(BlockType.Paragraph, line)
+                previousBlock = paragraph
+                document.addChild(paragraph)
+            } else {
+                previousBlock.content += `${line}`
+            }
+        }
         return document;
     }
 }

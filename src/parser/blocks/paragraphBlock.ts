@@ -10,6 +10,6 @@ export default class ParagraphBlock extends Block {
     }
 
     text(level: number = 0, result: string = ""): string {
-        return `${'-'.repeat(level)}> ${this.blockType} (${this.content})\n`
+        return `${'-'.repeat(level)}> ${this.blockType} (${this.content.replace('\n','\\n')})\n`
     }
 }
