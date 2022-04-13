@@ -1,6 +1,6 @@
 enum BlockType {
-    Document = "document",
-    Paragraph = "paragraph"
+    Document = 0,
+    Paragraph = 999
 
 }
 
