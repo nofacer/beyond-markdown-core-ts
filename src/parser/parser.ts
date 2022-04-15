@@ -10,6 +10,10 @@ class Parser {
 
         const lines = input.split('\n')
         for (const line of lines) {
+            if (line === '' && previousBlock.option.blockType === BlockType.Paragraph && previousBlock.option.isOpen) {
+                previousBlock.option.isOpen = false
+                continue
+            }
             const curBlockOption = this.getCurBlockOption(line)
             const curBlock = BlockFactory.generate(curBlockOption)
             const validParent: Block = curBlock.findValidParent(curBlockOption, previousBlock)

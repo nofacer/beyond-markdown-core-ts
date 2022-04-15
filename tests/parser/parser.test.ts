@@ -29,3 +29,13 @@ test('should break paragraph when there is \\', () => {
     const result: Block = parser.parse(input)
     expect(result.text()).toMatch(expectedResult)
 })
+
+test('should break paragraph when there is continuous break line', () => {
+    const input = "sample paragraph line1\n\nsample paragraph line2\n\n\nsample paragraph line3"
+    const expectedResult = "> Document\n" +
+        "-> Paragraph (sample paragraph line1)\n" +
+        "-> Paragraph (sample paragraph line2)\n" +
+        "-> Paragraph (sample paragraph line3)\n"
+    const result: Block = parser.parse(input)
+    expect(result.text()).toMatch(expectedResult)
+})
