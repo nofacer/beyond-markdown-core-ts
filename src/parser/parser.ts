@@ -1,35 +1,27 @@
 import Block from "./blocks/block";
 import {BlockType} from "./blocks/blockType";
-import BlockOption from "./blocks/blockOption";
 import BlockFactory from "./blocks/blockFactory";
 
 class Parser {
     parse(input: string): Block {
-        const document = new Block(new BlockOption(BlockType.Document, true, [], undefined, undefined))
+        const document = new Block(BlockType.Document, true, [], undefined, undefined)
         let previousBlock = document
 
         const lines = input.split('\n')
         for (const line of lines) {
-            if (line === '' && previousBlock.option.blockType === BlockType.Paragraph && previousBlock.option.isOpen) {
-                previousBlock.option.isOpen = false
+            let curLine = line.trim()
+            if (curLine === '' && previousBlock.blockType === BlockType.Paragraph && previousBlock.isOpen) {
+                previousBlock.isOpen = false
                 continue
             }
-            const curBlockOption = this.getCurBlockOption(line)
-            const curBlock = BlockFactory.generate(curBlockOption)
-            const validParent: Block = curBlock.findValidParent(curBlockOption, previousBlock)
+            if (curLine === '' && previousBlock.blockType != BlockType.Paragraph) {
+                continue
+            }
+            const curBlock = BlockFactory.generateFromLine(curLine)
+            const validParent: Block = curBlock.findValidParent(curBlock, previousBlock)
             previousBlock = curBlock.mergeIntoTree(validParent)
         }
         return document;
-    }
-
-    private getCurBlockOption(line: string): BlockOption {
-        let isOpen = true
-        let text = line
-        if (line.endsWith('\\')) {
-            isOpen = false
-            text = text.replace(/\\/, '')
-        }
-        return new BlockOption(BlockType.Paragraph, isOpen, [], undefined, text)
     }
 }
 

@@ -1,35 +1,33 @@
 import Block from "./block";
 import {BlockType} from "./blockType";
-import BlockOption from "./blockOption";
 
 export default class ParagraphBlock extends Block {
 
-    constructor(blockOption: BlockOption) {
-        super(blockOption);
+    constructor(
+        public blockType: BlockType,
+        public isOpen: boolean,
+        public children: Block[],
+        public parent?: Block,
+        public text?: string
+    ) {
+        super(blockType, isOpen, children, parent, text)
     }
 
-    text(level: number = 0, result: string = ""): string {
-        return `${'-'.repeat(level)}> ${BlockType[this.option.blockType]} (${this.option.text?.replace('\n', '\\n')})\n`
-    }
-
-    findValidParent(curBlockOption: BlockOption, previousBlock: Block): Block {
-        if (curBlockOption.blockType >= previousBlock.option.blockType && previousBlock.option.isOpen) {
+    findValidParent(curBlock: Block, previousBlock: Block): Block {
+        if (curBlock.blockType >= previousBlock.blockType && previousBlock.isOpen) {
             return previousBlock
         }
-        if (previousBlock.option.parent === undefined) {
-            throw new Error('error')
-        }
-        return this.findValidParent(curBlockOption, previousBlock.option.parent)
+        return this.findValidParent(curBlock, previousBlock.parent as Block)
     }
 
 
     mergeIntoTree(validParent: Block): Block {
-        if (validParent.option.blockType === BlockType.Paragraph) {
-            validParent.option.text += (this.option.text ? this.option.text : '')
+        if (validParent.blockType === BlockType.Paragraph) {
+            validParent.text += this.text as string
             return validParent
         }
-        validParent.option.children.push(this)
-        this.option.parent = validParent
+        validParent.children.push(this)
+        this.parent = validParent
         return this
     }
 }

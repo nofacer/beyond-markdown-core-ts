@@ -1,42 +1,51 @@
 import {BlockType} from "./blockType";
-import BlockOption from "./blockOption";
 
 export default class Block {
-    constructor(public option: BlockOption) {
+
+    constructor(
+        public blockType: BlockType,
+        public isOpen: boolean,
+        public children: Block[],
+        public parent?: Block,
+        public text?: string
+    ) {
     }
 
 
-    text(level = 0, result = "") {
+    toText(level = 0, result = "") {
         result += this.curText(level)
-        for (const block of this.option.children) {
-            result += block.curText(level + 1)
+        for (const block of this.children) {
+            result += block.toText(level + 1)
         }
         return result
     }
 
     private curText(level: number) {
-        if (this.option.blockType === BlockType.Paragraph) {
-            return `${'-'.repeat(level)}> ${BlockType[this.option.blockType]} (${this.option.text?.replace('\n', '\\n')})\n`
+        let text = `${'-'.repeat(level)}> ${BlockType[this.blockType]}`
+        if (this.text) {
+            text += ` (${this.text.replace('\n', '\\n')})\n`
+        } else {
+            text += '\n'
         }
-        return `${'-'.repeat(level)}> ${BlockType[this.option.blockType]}\n`
+        return text
     }
 
-    findValidParent(curBlockOption: BlockOption, previousBlock: Block): Block {
-        if (curBlockOption.blockType > previousBlock.option.blockType && previousBlock.option.isOpen) {
+    findValidParent(curBlock: Block, previousBlock: Block): Block {
+        if (curBlock.blockType > previousBlock.blockType && previousBlock.isOpen) {
             return previousBlock
         }
-        if (previousBlock.option.isOpen) {
-            previousBlock.option.isOpen = false
+        if (previousBlock.isOpen) {
+            previousBlock.isOpen = false
         }
-        if (previousBlock.option.parent === undefined) {
+        if (previousBlock.parent === undefined) {
             throw new Error('error')
         }
-        return this.findValidParent(curBlockOption, previousBlock.option.parent)
+        return this.findValidParent(curBlock, previousBlock.parent)
     }
 
     mergeIntoTree(validParent: Block): Block {
-        validParent.option.children.push(this)
-        this.option.parent = validParent
-        return validParent
+        this.parent = validParent
+        validParent.children.push(this)
+        return this
     }
 }

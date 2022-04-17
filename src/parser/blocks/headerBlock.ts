@@ -1,7 +1,7 @@
-import {BlockType} from "./blockType";
 import Block from "./block";
+import {BlockType} from "./blockType";
 
-export default class BlockOption {
+export default class HeaderBlock extends Block {
     constructor(
         public blockType: BlockType,
         public isOpen: boolean,
@@ -9,5 +9,7 @@ export default class BlockOption {
         public parent?: Block,
         public text?: string
     ) {
+        super(blockType, isOpen, children, parent, text)
     }
+
 }
