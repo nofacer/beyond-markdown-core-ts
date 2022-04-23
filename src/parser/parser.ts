@@ -1,10 +1,11 @@
 import Block from "./blocks/block";
 import {BlockType} from "./blocks/blockType";
 import BlockFactory from "./blocks/blockFactory";
+import {uid} from "uid";
 
 class Parser {
     parse(input: string): Block {
-        const document = new Block(BlockType.Document, true, [], undefined, undefined)
+        const document = new Block(uid(), BlockType.Document, true, [], undefined, undefined)
         let previousBlock = document
 
         const lines = input.split('\n')

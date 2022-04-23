@@ -3,6 +3,7 @@ import {BlockType} from "./blockType";
 export default class Block {
 
     constructor(
+        public id: string,
         public blockType: BlockType,
         public isOpen: boolean,
         public children: Block[],

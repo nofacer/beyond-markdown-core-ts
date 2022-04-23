@@ -1,6 +1,7 @@
 import {BlockType} from "./blockType";
 import ParagraphBlock from "./paragraphBlock";
 import Block from "./block";
+import {uid} from "uid";
 
 export default class BlockFactory {
     public static generateFromLine(line: string) {
@@ -8,9 +9,9 @@ export default class BlockFactory {
         let isOpen = this.getIsOpen(line, blockType)
         let text = this.getText(line, blockType)
         if (blockType === BlockType.Paragraph) {
-            return new ParagraphBlock(blockType, isOpen, [], undefined, text)
+            return new ParagraphBlock(uid(), blockType, isOpen, [], undefined, text)
         }
-        return new Block(blockType, isOpen, [], undefined, text)
+        return new Block(uid(), blockType, isOpen, [], undefined, text)
     }
 
     private static getBlockType(line: string): BlockType {
