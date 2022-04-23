@@ -1,5 +1,5 @@
-import Block from "./blocks/block";
-import {BlockType} from "./blocks/blockType";
+import Block from "./block";
+import {BlockType} from "./blockType";
 
 interface BLockMetadata {
     id: string,

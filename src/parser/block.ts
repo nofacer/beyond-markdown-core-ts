@@ -1,15 +1,23 @@
 import {BlockType} from "./blockType";
+import BlockOption from "./BlockOption";
+import {uid} from "uid";
 
-export default class Block {
+export default class Block implements IBlock {
+    public id: string
+    public blockType: BlockType
+    public isOpen: boolean
+    public children: Block[]
+    public parent: Block
+    public text: string
 
-    constructor(
-        public id: string,
-        public blockType: BlockType,
-        public isOpen: boolean,
-        public children: Block[],
-        public parent?: Block,
-        public text?: string
-    ) {
+    constructor(blockOption: BlockOption) {
+
+        this.id = blockOption.uid ? blockOption.uid : uid()
+        this.blockType = blockOption.blockType
+        this.isOpen = blockOption.isOpen
+        this.children = blockOption.children
+        this.parent = blockOption.parent ? blockOption.parent : this
+        this.text = blockOption.text ? blockOption.text : ''
     }
 
 

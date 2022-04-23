@@ -1,24 +1,28 @@
 import {Block, Utils} from "../../src/index";
-import {BlockType} from "../../src/parser/blocks/blockType";
+import BlockOption from "../../src/parser/BlockOption";
+import {BlockType} from "../../src/parser/blockType";
 
 describe('util test', () => {
     test('should serialize document', () => {
-        const document = new Block("123", BlockType.Document, true, [])
-        const h1 = new Block("234", BlockType.H1, false, [], document, "h1")
+        const document = new Block(new BlockOption(BlockType.Document, true, [], undefined, undefined, "123"))
+        const h1 = new Block(new BlockOption(BlockType.H1, false, [], document, "h1", "234"))
         document.children.push(h1)
-        const p1 = new Block("345", BlockType.Paragraph, false, [], h1, "p1")
-        const p2 = new Block("789", BlockType.Paragraph, false, [], h1, "p2")
+        const p1 = new Block(new BlockOption(BlockType.Paragraph, false, [], h1, "p1", "345"))
+        const p2 = new Block(new BlockOption(BlockType.Paragraph, false, [], h1, "p2", "456"))
         h1.children.push(p1)
         h1.children.push(p2)
-        const h2 = new Block("456", BlockType.H2, true, [], document, "h2")
+        const h2 = new Block(new BlockOption(BlockType.H2, true, [], document, "h2", "567"))
         document.children.push(h2)
 
         const result = Utils.serializeDocument(document)
+        console.info(JSON.stringify(result, null, 4))
         const expectResult = `
-            {
+        {
     "id":"123",
+    "parentId":"123",
     "type":"Document",
     "isOpen":true,
+    "text":"",
     "children":[
         {
             "id":"234",
@@ -38,7 +42,7 @@ describe('util test', () => {
                     ]
                 },
                 {
-                    "id":"789",
+                    "id":"456",
                     "parentId":"234",
                     "type":"Paragraph",
                     "isOpen":false,
@@ -50,7 +54,7 @@ describe('util test', () => {
             ]
         },
         {
-            "id":"456",
+            "id":"567",
             "parentId":"123",
             "type":"H2",
             "isOpen":true,

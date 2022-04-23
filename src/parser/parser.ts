@@ -1,11 +1,12 @@
-import Block from "./blocks/block";
-import {BlockType} from "./blocks/blockType";
-import BlockFactory from "./blocks/blockFactory";
-import {uid} from "uid";
+import Block from "./block";
+import {BlockType} from "./blockType";
+import BlockFactory from "./blockFactory";
+import BlockOption from "./BlockOption";
+import DocumentBlock from "./blocks/documentBlock";
 
 class Parser {
     parse(input: string): Block {
-        const document = new Block(uid(), BlockType.Document, true, [], undefined, undefined)
+        const document = new DocumentBlock(new BlockOption(BlockType.Document, true, []))
         let previousBlock = document
 
         const lines = input.split('\n')

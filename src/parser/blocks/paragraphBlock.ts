@@ -1,17 +1,11 @@
-import Block from "./block";
-import {BlockType} from "./blockType";
+import Block from "../block";
+import {BlockType} from "../blockType";
+import BlockOption from "../BlockOption";
 
 export default class ParagraphBlock extends Block {
 
-    constructor(
-        public id: string,
-        public blockType: BlockType,
-        public isOpen: boolean,
-        public children: Block[],
-        public parent?: Block,
-        public text?: string
-    ) {
-        super(id, blockType, isOpen, children, parent, text)
+    constructor(blockOption: BlockOption) {
+        super(blockOption);
     }
 
     findValidParent(curBlock: Block, previousBlock: Block): Block {

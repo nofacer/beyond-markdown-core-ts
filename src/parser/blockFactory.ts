@@ -1,17 +1,21 @@
 import {BlockType} from "./blockType";
-import ParagraphBlock from "./paragraphBlock";
-import Block from "./block";
-import {uid} from "uid";
+import BlockOption from "./BlockOption";
+import {Blocks} from "./blocks";
 
 export default class BlockFactory {
     public static generateFromLine(line: string) {
         let blockType = this.getBlockType(line)
         let isOpen = this.getIsOpen(line, blockType)
         let text = this.getText(line, blockType)
-        if (blockType === BlockType.Paragraph) {
-            return new ParagraphBlock(uid(), blockType, isOpen, [], undefined, text)
-        }
-        return new Block(uid(), blockType, isOpen, [], undefined, text)
+        const blockOption = new BlockOption(blockType, isOpen, [], undefined, text)
+        return this.getTypedBlock(blockType, blockOption)
+    }
+
+    public static getTypedBlock(blockType: BlockType, blockOption: BlockOption) {
+        const blockClassName: string = BlockType[blockType]
+        console.info(blockClassName)
+        console.info(Blocks[blockClassName])
+        return new Blocks[blockClassName](blockOption)
     }
 
     private static getBlockType(line: string): BlockType {

@@ -1,5 +1,5 @@
 import Parser from "./parser/parser";
-import Block from "./parser/blocks/block";
+import Block from "./parser/block";
 import Utils from "./parser/utils";
 
 export {
