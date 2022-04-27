@@ -1,12 +1,14 @@
 import Block from "./block";
 import {BlockType} from "./blockType";
+import BlockFactory from "./blockFactory";
+import BlockOption from "./BlockOption";
 
 interface BLockMetadata {
     id: string,
     parentId: string,
     type: string,
     isOpen: boolean,
-    children: ArrayLike<BLockMetadata>,
+    children: BLockMetadata[],
     text: string
 }
 
@@ -14,14 +16,13 @@ export default class Utils {
     static serializeDocument(document: Block): BLockMetadata {
         const j = {
             "id": document.id,
-            "parentId": document.parent?.id,
+            "parentId": document.parent.id,
             "type": BlockType[document.blockType],
             "isOpen": document.isOpen,
             "text": document.text,
             "children": []
         } as BLockMetadata
         if (document.children.length < 1) {
-            j["children"] = []
             return j
         } else {
             const children = []
@@ -32,4 +33,31 @@ export default class Utils {
             return j
         }
     }
+
+    static deserializeDocument(serializedDocument: BLockMetadata, cache: { [x: string]: Block }): Block {
+        const blockType = BlockType[serializedDocument.type as keyof typeof BlockType]
+        const curBlock = BlockFactory.getTypedBlock(blockType, new BlockOption(
+            blockType,
+            serializedDocument.isOpen,
+            [],
+            cache[serializedDocument.parentId],
+            serializedDocument.text,
+            serializedDocument.id))
+        if (serializedDocument.children.length < 1) {
+            return curBlock
+        } else {
+            const children = []
+            cache[serializedDocument.id] = curBlock
+            for (const child of serializedDocument.children) {
+                children.push(this.deserializeDocument(child, cache))
+            }
+            curBlock.children = children
+            return curBlock
+        }
+
+    }
+}
+
+export {
+    BLockMetadata
 }

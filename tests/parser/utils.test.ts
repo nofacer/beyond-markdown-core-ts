@@ -1,6 +1,7 @@
 import {Block, Utils} from "../../src/index";
 import BlockOption from "../../src/parser/BlockOption";
 import {BlockType} from "../../src/parser/blockType";
+import {BLockMetadata} from "../../src/parser/utils";
 
 describe('util test', () => {
     test('should serialize document', () => {
@@ -15,58 +16,96 @@ describe('util test', () => {
         document.children.push(h2)
 
         const result = Utils.serializeDocument(document)
-        console.info(JSON.stringify(result, null, 4))
-        const expectResult = `
-        {
-    "id":"123",
-    "parentId":"123",
-    "type":"Document",
-    "isOpen":true,
-    "text":"",
-    "children":[
-        {
-            "id":"234",
-            "parentId":"123",
-            "type":"H1",
-            "isOpen":false,
-            "text":"h1",
-            "children":[
+        const expectResult = {
+            "id": "123",
+            "parentId": "123",
+            "type": "Document",
+            "isOpen": true,
+            "text": "",
+            "children": [
                 {
-                    "id":"345",
-                    "parentId":"234",
-                    "type":"Paragraph",
-                    "isOpen":false,
-                    "text":"p1",
-                    "children":[
-
+                    "id": "234",
+                    "parentId": "123",
+                    "type": "H1",
+                    "isOpen": false,
+                    "text": "h1",
+                    "children": [
+                        {
+                            "id": "345",
+                            "parentId": "234",
+                            "type": "Paragraph",
+                            "isOpen": false,
+                            "text": "p1",
+                            "children": []
+                        },
+                        {
+                            "id": "456",
+                            "parentId": "234",
+                            "type": "Paragraph",
+                            "isOpen": false,
+                            "text": "p2",
+                            "children": []
+                        }
                     ]
                 },
                 {
-                    "id":"456",
-                    "parentId":"234",
-                    "type":"Paragraph",
-                    "isOpen":false,
-                    "text":"p2",
-                    "children":[
-
-                    ]
+                    "id": "567",
+                    "parentId": "123",
+                    "type": "H2",
+                    "isOpen": true,
+                    "text": "h2",
+                    "children": []
                 }
             ]
-        },
-        {
-            "id":"567",
-            "parentId":"123",
-            "type":"H2",
-            "isOpen":true,
-            "text":"h2",
-            "children":[
-
-            ]
         }
-    ]
-}
-        `
-        console.info(JSON.stringify(result, null, 4))
-        expect(result).toEqual(JSON.parse(expectResult))
+
+        expect(result).toEqual(expectResult)
+    })
+
+    test('should deserialize document', () => {
+        const blockMetadata = {
+            "id": "123",
+            "parentId": "123",
+            "type": "Document",
+            "isOpen": true,
+            "text": "",
+            "children": [
+                {
+                    "id": "234",
+                    "parentId": "123",
+                    "type": "H1",
+                    "isOpen": false,
+                    "text": "h1",
+                    "children": [
+                        {
+                            "id": "345",
+                            "parentId": "234",
+                            "type": "Paragraph",
+                            "isOpen": false,
+                            "text": "p1",
+                            "children": []
+                        },
+                        {
+                            "id": "456",
+                            "parentId": "234",
+                            "type": "Paragraph",
+                            "isOpen": false,
+                            "text": "p2",
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "id": "567",
+                    "parentId": "123",
+                    "type": "H2",
+                    "isOpen": true,
+                    "text": "h2",
+                    "children": []
+                }
+            ]
+        } as BLockMetadata
+        expect(Utils.serializeDocument(Utils.deserializeDocument(blockMetadata, {}))).toEqual(blockMetadata)
+
     })
 })

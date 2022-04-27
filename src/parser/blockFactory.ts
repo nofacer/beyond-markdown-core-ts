@@ -13,8 +13,6 @@ export default class BlockFactory {
 
     public static getTypedBlock(blockType: BlockType, blockOption: BlockOption) {
         const blockClassName: string = BlockType[blockType]
-        console.info(blockClassName)
-        console.info(Blocks[blockClassName])
         return new Blocks[blockClassName](blockOption)
     }
 

@@ -46,9 +46,6 @@ export default class Block implements IBlock {
         if (previousBlock.isOpen) {
             previousBlock.isOpen = false
         }
-        if (previousBlock.parent === undefined) {
-            throw new Error('error')
-        }
         return this.findValidParent(curBlock, previousBlock.parent)
     }
 
