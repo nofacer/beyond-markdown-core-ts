@@ -12,13 +12,6 @@ class Parser {
         const lines = input.split('\n')
         for (const line of lines) {
             let curLine = line.trim()
-            if (curLine === '' && previousBlock.blockType === BlockType.Paragraph && previousBlock.isOpen) {
-                previousBlock.isOpen = false
-                continue
-            }
-            if (curLine === '' && previousBlock.blockType != BlockType.Paragraph) {
-                continue
-            }
             const curBlock = BlockFactory.generateFromLine(curLine)
             const validParent: Block = curBlock.findValidParent(curBlock, previousBlock)
             previousBlock = curBlock.mergeIntoTree(validParent)

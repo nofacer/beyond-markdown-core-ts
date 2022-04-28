@@ -17,6 +17,16 @@ export default class ParagraphBlock extends Block {
 
 
     mergeIntoTree(validParent: Block): Block {
+        if (this.text === '') {
+            if (validParent.blockType === BlockType.Paragraph && validParent.isOpen) {
+                validParent.isOpen = false
+                return validParent
+            }
+            if (validParent.blockType !== BlockType.Paragraph) {
+                return validParent
+            }
+        }
+
         if (validParent.blockType === BlockType.Paragraph) {
             validParent.text += this.text as string
             return validParent
