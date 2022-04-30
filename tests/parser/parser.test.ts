@@ -2,7 +2,7 @@ import {Parser, Block} from "../../src/index";
 import * as fs from "fs";
 
 let parser: Parser
-beforeAll(() => {
+beforeEach(() => {
     parser = new Parser()
 })
 
@@ -11,11 +11,11 @@ describe('integrated test', () => {
         const demo = fs.readFileSync('README.md').toString()
         const expectedResult = "> Document\n" +
             "-> H1 (Beyond markdown core)\n" +
-            "--> Paragraph (Beyond markdown core is a library to parse markdown text into a designed structure.)\n"+
-            "--> H2 (Support format)\n"+
-            "---> H3 (Header)\n"+
-            "----> Paragraph (TBD)\n"+
-            "---> H3 (Paragraph)\n"+
+            "--> Paragraph (Beyond markdown core is a library to parse markdown text into a designed structure.)\n" +
+            "--> H2 (Support format)\n" +
+            "---> H3 (Header)\n" +
+            "----> Paragraph (TBD)\n" +
+            "---> H3 (Paragraph)\n" +
             "----> Paragraph (TBD)\n"
         const result: Block = parser.parse(demo)
         expect(result.toText()).toEqual(expectedResult)
@@ -86,6 +86,35 @@ describe('header block', () => {
             "-----> H5 (H5)\n" +
             "------> H6 (H6)\n" +
             "-------> Paragraph (####### not header)\n"
+        const result: Block = parser.parse(input)
+        expect(result.toText()).toEqual(expectedResult)
+    })
+})
+
+describe('fenced code block', () => {
+    test('should not parse fenced block if it is not paired', () => {
+        const input = "" +
+            "```\n" +
+            "# H1 \n" +
+            "hello world\n"
+        const expectedResult = "" +
+            "> Document\n" +
+            "-> Paragraph (```)\n" +
+            "-> H1 (H1)\n" +
+            "--> Paragraph (hello world)\n"
+        const result: Block = parser.parse(input)
+        expect(result.toText()).toEqual(expectedResult)
+    })
+
+    test('should parse fenced block', () => {
+        const input = "" +
+            "```\n" +
+            "# H1 \n" +
+            "hello world\n" +
+            "```\n"
+        const expectedResult = "" +
+            "> Document\n" +
+            "-> FencedBlock (# H1\\nhello world)\n"
         const result: Block = parser.parse(input)
         expect(result.toText()).toEqual(expectedResult)
     })
