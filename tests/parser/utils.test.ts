@@ -106,6 +106,16 @@ describe('util test', () => {
             ]
         } as BLockMetadata
         expect(Utils.serializeDocument(Utils.deserializeDocument(blockMetadata, {}))).toEqual(blockMetadata)
+    })
 
+    test('should get block by id', () => {
+        const document = new Block(new BlockOption(BlockType.Document, true, [], undefined, undefined, "1"))
+        const child11 = new Block(new BlockOption(BlockType.H1, true, [], document, undefined, "21"))
+        const child12 = new Block(new BlockOption(BlockType.H1, true, [], document, undefined, "22"))
+        document.children.push(child11)
+        document.children.push(child12)
+        const child21 = new Block(new BlockOption(BlockType.H2, false, [], child12, undefined, "31"))
+        child12.children.push(child21)
+        expect(Utils.getBlockById(document,"31")!.id).toEqual("31")
     })
 })

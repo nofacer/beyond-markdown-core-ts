@@ -5,6 +5,24 @@ Beyond markdown core is a library to parse markdown text into a designed structu
 ## Support format
  
 ### Header
-TBD
+```
+# H1
+## H2
+### H3
+#### H4
+##### H5
+###### H6
+```
 ### Paragraph
-TBD
+```
+hello world
+```
+#### Break line
+```
+hello\
+world
+
+hello
+
+world
+```

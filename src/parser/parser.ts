@@ -48,7 +48,7 @@ class Parser {
             } else {
                 document = Utils.deserializeDocument(this.documentBackup as BLockMetadata, {})
                 previousBlock = Utils.getBlockById(document, this.parentIdBackup as string) as Block
-                const curBlock = BlockFactory.getTypedBlock(BlockType.FencedBlock, new BlockOption(BlockType.FencedBlock, false, [], undefined, this.fencedCodeContent.replace(/^```\n/, '').trim(), uid()))
+                const curBlock = BlockFactory.getTypedBlock(BlockType.FencedCode, new BlockOption(BlockType.FencedCode, false, [], undefined, this.fencedCodeContent.trim().replace(/^```\n/, ''), uid()))
                 const validParent: Block = curBlock.findValidParent(curBlock, previousBlock)
                 previousBlock = curBlock.mergeIntoTree(validParent)
                 this.waitForFencedCode = false

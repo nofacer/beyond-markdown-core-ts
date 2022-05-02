@@ -6,7 +6,7 @@ enum BlockType {
     H4,
     H5,
     H6,
-    FencedBlock,
+    FencedCode,
     Paragraph = 999
 
 }

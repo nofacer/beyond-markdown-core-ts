@@ -14,9 +14,11 @@ describe('integrated test', () => {
             "--> Paragraph (Beyond markdown core is a library to parse markdown text into a designed structure.)\n" +
             "--> H2 (Support format)\n" +
             "---> H3 (Header)\n" +
-            "----> Paragraph (TBD)\n" +
+            "----> FencedCode (# H1\\n## H2\\n### H3\\n#### H4\\n##### H5\\n###### H6)\n" +
             "---> H3 (Paragraph)\n" +
-            "----> Paragraph (TBD)\n"
+            "----> FencedCode (hello world)\n" +
+            "----> H4 (Break line)\n" +
+            "-----> FencedCode (hello\\\\nworld\\n\\nhello\\n\\nworld)\n"
         const result: Block = parser.parse(demo)
         expect(result.toText()).toEqual(expectedResult)
     })
@@ -114,7 +116,7 @@ describe('fenced code block', () => {
             "```\n"
         const expectedResult = "" +
             "> Document\n" +
-            "-> FencedBlock (# H1\\nhello world)\n"
+            "-> FencedCode (# H1\\nhello world)\n"
         const result: Block = parser.parse(input)
         expect(result.toText()).toEqual(expectedResult)
     })

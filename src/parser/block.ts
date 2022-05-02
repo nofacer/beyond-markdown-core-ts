@@ -32,7 +32,7 @@ export default class Block implements IBlock {
     private curText(level: number) {
         let text = `${'-'.repeat(level)}> ${BlockType[this.blockType]}`
         if (this.text) {
-            text += ` (${this.text.replace('\n', '\\n')})\n`
+            text += ` (${this.text.replace(/\n/g, '\\n')})\n`
         } else {
             text += '\n'
         }

@@ -57,13 +57,13 @@ export default class Utils {
 
     }
 
-    static getBlockById(document: Block, id: string) {
+    static getBlockById(document: Block, id: string): Block | undefined {
         if (document.id === id) {
             return document
         }
         for (const child of document.children) {
             const result = this.getBlockById(child, id)
-            if (result) return child
+            if (result) return result
         }
     }
 }

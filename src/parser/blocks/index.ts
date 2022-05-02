@@ -1,7 +1,7 @@
 import DocumentBlock from "./documentBlock";
 import HeaderBlock from "./headerBlock";
 import ParagraphBlock from "./paragraphBlock";
-import FencedBlock from "./FencedBlock";
+import FencedCodeBlock from "./FencedCodeBlock";
 
 export const Blocks: any = {
     "Document": DocumentBlock,
@@ -11,6 +11,6 @@ export const Blocks: any = {
     "H4": HeaderBlock,
     "H5": HeaderBlock,
     "H6": HeaderBlock,
-    "FencedBlock": FencedBlock,
+    "FencedCode": FencedCodeBlock,
     "Paragraph": ParagraphBlock
 }
